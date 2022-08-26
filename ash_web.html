@@ -1,0 +1,224 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.11/jquery.csv.min.js"></script>
+
+    <style>
+      body{
+        background-color: rgb(63, 63, 63);
+        margin: 10px;
+        /* background-color: rgb(22, 22, 22); */
+        color: white;
+      }
+      a{
+        /* color: inherit; */
+        color: #3391ff;
+      }
+      .logo_img{
+        width: 200px;
+        user-select: none;
+        -webkit-user-drag: none;
+	      -moz-user-select: none;
+        pointer-events: none;
+        display: block;
+        /* pointer-events: all; */
+        /* background-color: rgb(63, 63, 63); */
+      }
+      .logo-parent{
+        margin: 10px;
+        width: 200px;
+      }
+      .page_num_child{
+        font-size: 150%;
+        margin-left: 10px;
+      }
+      .pagenation{
+        margin-top: 20px;
+        /* color: white; */
+      }
+      img{
+            width: 400px;
+        }
+      .midimg{
+          grid-row:span 2;
+      }
+      .figcap1{
+        font-size: 30%;
+      }
+      .wrap-parent{
+        /* display: block;
+        margin-left: auto;
+        margin-right: auto; */
+        /* margin: 0 auto; */
+        /* margin-left: 50px; */
+        /* margin-right: 50px; */
+        /* width: auto; */
+        /* text-align: center; */
+      }
+      /* .wrap-child{ */
+        /* width: auto; */
+        /* display: inline-block; */
+        /* max-width: auto; */
+      /* } */
+      .wrap{
+        /* display: inline-block; */
+        margin-top: 10px;
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(auto-fill,416px);
+        grid-template-rows: repeat(auto-fill,270px);
+      }
+      footer{
+        margin-top: 50px;
+        margin-left: 100px;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="logo-parent">
+      <a href="ash_index.html"><img class="logo_img" src="ashPJ4(22ptmoreNarrow).png"></a>
+    </div>
+
+    <div class="pagenation">
+      ページ
+    </div>
+    
+    <div class="wrap-parent">
+      <div class="wrap-child">
+        <div class="wrap">
+        </div>
+      </div>
+    </div>
+
+    <div class="pagenation">
+      ページ
+      <a href=""></a>
+    </div>
+  </body>
+  <footer>
+    Ash Scene Hold Project. Establish & Contribute by Koituhatama(VRC:masiroiizo). Thanks for all Ash users. ASH-CHAN(<a href="https://booth.pm/ja/items/3234473">Booth</a>).
+  </footer>
+</html>
+
+<script>
+  // console.log('hello');
+  // $.get("ash.json", function(data){
+	//   var hoge = $.parseJSON(data);
+  //   console.log(hoge);
+  // });
+  // $(".wrap").append('<h2>test1</h2>')
+
+  let url = new URL(window.location.href)
+  let params = url.searchParams
+  let page_num = params.get('page')
+  console.log(`page-num: ${page_num}`);
+  if(page_num == null){
+    page_num = 1
+  }
+  $(".pagenation").text(`現在のページ: ${page_num}`)
+  // 1:100 page_num+1
+  // 101:200 2-1*100:100*2 ((page_num-1)*100)+1:100*page_num
+
+  // for(let v=1; v<10; v++){
+  //   console.log(`page_num: ${v} ${((v-1)*100)+1}:${100*v}`);
+  //   for(let w=((v-1)*10)+1; w<=10*v; w++){
+  //     console.log(w);
+  //   }
+  //   console.log('fin');
+  // }
+
+  $.get("ash5.json", parseJson, "json")
+  function parseJson(data) {
+    console.log(`data.length: ${Object.keys(data).length}`);
+    console.log(Object.keys(data).length/100);
+    let ash_len = Object.keys(data).length
+    var ash_100_nth
+    
+    // 100分割したら何回分になるか
+    if (ash_len%100 > 0){
+      ash_100_nth = parseInt((ash_len - ash_len%100)/100)+1
+      console.log(`ash_100_nth: ${ash_100_nth}`);
+    }else{
+      ash_100_nth = parseInt(ash_len/100)
+      console.log(`ash_100_nth: ${ash_100_nth}`);
+    }
+
+    // ページネーションの作成
+    for(let v=1; v<=ash_100_nth; v++){
+      $(".pagenation").append(`
+        <a class="page_num_child" href="ash_web.html?page=${v}">${v}</a>
+      `)
+    }
+
+    // console.log(data);
+    console.log(data[1]["image"][0].split('.jpg')[0]+'?format=jpg&name=small');
+    console.log(data[6]["image"].length)
+
+    // $(".wrap").append(`
+    // <img src='https://pbs.twimg.com/media/FZPNQn3VEAEfwvD?format=png&name=360x360'}></img>`)
+
+    // for(let v=1; v<10; v++){
+    var image_max
+    if(ash_100_nth == page_num){
+      image_max = ash_len
+    }else{
+      image_max = 100*page_num
+    }
+    for(let v=((page_num-1)*100)+1; v<=image_max; v++){
+      // console.log(data[v].length);
+      // console.log(data.length);
+      for(let w=0; w<data[v]["image"].length; w++){
+        var image_url
+
+        // console.log(data[v]["image"][w]);
+        //videoのときはimageがnullになっている
+        if(data[v]["image"][w] == null){
+          console.log('null');
+        }else if(data[v]["image"][w].includes(".jpg")){
+          image_url = data[v]["image"][w].split('.jpg')[0]+'?format=jpg&name=small'
+
+        }else if(data[v]["image"][w].includes(".png")){
+          image_url = data[v]["image"][w].split('.png')[0]+'?format=jpg&name=small'
+        }else{
+          console.log(".jpgも.pngも含まれていない");
+        }
+        // console.log(data[v]["image"][w].includes(".jpg"));
+        $(".wrap").append(`
+        <div>
+        <img src=${image_url}></img>
+        <a class="figcap1" target="_blank" rel="noopener noreferrer" href=${image_url}>
+          ${image_url}
+        </a>
+        <a class="figcap1"  target="_blank" rel="noopener noreferrer" href=${data[v]["tweet_url"]}>
+          ${data[v]["tweet_url"]}
+        </a>
+        </div>
+        `)
+      }
+    }
+
+      // <figcaption class="figcap1">${data[v]["tweet_url"]}
+      // <figcaption class="figcap1">
+      //   ${data[v]["image"][w].split('.jpg')[0]+'?format=jpg&name=small'}
+      //   <a href=${data[v]["image"][w].split('.jpg')[0]+'?format=jpg&name=small'}></a>
+      // </figcaption>
+      
+    // ある一定の高さの画像にgridの高さを高くする
+    $("img").bind("load",function(){
+      // console.log($(this).height());
+      // console.log($(this).width());
+      if($(this).height() > 250){
+          $(this).parents('div').addClass('midimg')
+      }
+    });
+      
+
+    // var json = $.json
+  }
+
+
+  // const jsonData = require('./ash (10).csv')
+  // console.log(jsonData)
+
+</script>
