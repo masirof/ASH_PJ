@@ -25,22 +25,23 @@
     <meta name="twitter:title" content="ASH PJ" />
     <meta name="twitter:description" content="Ash Scene Hold Project" />
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style/index.css">
+    <script src="script/index.js"></script>
   </head>
   <body>
     <header class="logo-parent">
-      <img class="ash_face" src="src/ashface1.png">
-      <img class="ash_logo" src="src/ashPJ3.png">
+      <img class="ash_face" src="imgs/ashface1.png" draggable="false">
+      <img class="ash_logo" src="imgs/ashPJ3.png" draggable="false">
     </header>
 
     <main>
-      <h1 class="">"ASH" Ash Scene Hold PJ.</h1>
+      <h1 class="screen-reader-text">"ASH" Ash Scene Hold PJ.</h1>
 
       <section id="caution">
         <h2 class="screen-reader-text">入り口</h2>
 
         <p>Enter ↓</p>
-        <a href="ash_web.html"><img class="ash_caution" src="imgs/ash-chan is-very-cute1.svg"></a>
+        <a href="ash_web.html"><img class="ash_caution" src="imgs/ash-chan-is-very-cute1.svg" draggable="false"></a>
         <p>Enter ↑</p>
       </section>
 
@@ -51,7 +52,7 @@
       </section>
 
       <section id="explanation">
-        <h2 class="screen-reader-text">-- Ash Scene Hold Project</h2>
+        <h2>-- Ash Scene Hold Project</h2>
 
         <p>
           アッシュちゃんの画像を一覧表示するサイトです．
@@ -62,7 +63,7 @@
         <h2 class="screen-reader-text">入り口</h2>
 
         <p>Enter ↓</p>
-        <a href="ash_web.html"><img class="ash_caution" src="imgs/ash-chan is-very-cute1.svg"></a>
+        <a href="ash_web.html"><img class="ash_caution" src="imgs/ash-chan-is-very-cute1.svg" draggable="false"></a>
         <p>Enter ↑</p>
       </section>
     </main>
@@ -71,9 +72,10 @@
       Ash Scene Hold Project. Establish & Contribute by Koituhatama(VRC:masiroiizo). Thanks for all Ash users. ASH-CHAN(<a
         href="https://booth.pm/ja/items/3234473">Booth</a>).
 
-      <div class="collapsible-wrapper">
-        <a href="javascript:void(0)">プライバシーポリシー</a>
-        <div class="collapsible">
+      <div class="collapsible">
+        <input type="checkbox" id="collapsible-privacy-policy" class="collapsible-controller">
+        <label for="collapsible-privacy-policy">プライバシーポリシー</label>
+        <div class="collapsible-target">
           当サイトでは、Googleによるアクセス解析ツール「Googleアナリティクス」を使用しています。このGoogleアナリティクスはデータの収集のためにCookieを使用しています。このデータは匿名で収集されており、個人を特定するものではありません。
           この機能はCookieを無効にすることで収集を拒否することが出来ますので、お使いのブラウザの設定をご確認ください。この規約に関しての詳細はGoogleアナリティクスサービス利用規約のページやGoogleポリシーと規約ページをご覧ください。
         </div>

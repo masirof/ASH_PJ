@@ -4,11 +4,45 @@
 
 body {
   background-color: rgb(22, 22, 22);
-  margin: 10px;
+  margin: 0;
+  padding: 0;
   color: white;
+}
 
-  header, section, footer {
-    margin: 1em auto;
+header {
+  text-align: center;
+  padding: 1em;
+}
+
+section {
+  margin: 1em auto;
+  max-width: 60em;
+  padding: 0 1em;
+}
+
+footer {
+  background-color: #000;
+  margin: 0;
+  padding: 2em 1em;
+}
+
+.collapsible {
+  .collapsible-controller {
+    display: none;
+  }
+
+  label {
+    color: #3391ff;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .collapsible-target {
+    display: none;
+  }
+
+  .collapsible-controller:checked ~ .collapsible-target {
+    display: initial;
   }
 }
 
@@ -16,15 +50,16 @@ a {
   color: #3391ff;
 }
 
-.AshRight-parent {
-  text-align: center;
-  margin-top: 100px;
+.screen-reader-text {
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  overflow: hidden;
+  position: absolute !important;
+  width: 1px;
 }
 
-.AshRight {
-  padding-bottom: 100px;
-  text-align: justify;
-  white-space: pre-line;
-  display: inline-block;
-  max-width: 1000px;
+.collapsible {
+  .collapsed {
+    display: none;
+  }
 }

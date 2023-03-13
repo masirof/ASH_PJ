@@ -1,59 +1,39 @@
 @import "./common.scss";
 
-img.logo-parent {
-  user-select: none;
-  -webkit-user-drag: none;
-  -moz-user-select: none;
-  pointer-events: none;
+section {
+  text-align: center;
+  margin: min(7em, 15vw) auto;
 }
 
-img.ash_face {
-  width: 700px;
-  margin-top: -10px;
-  margin-right: auto;
-  margin-left: auto;
+img {
   display: block;
-}
-
-img.ash_logo {
-  width: 500px;
-  /* z-index: 1; */
-  padding: 20px;
-  border-radius: 20px;
-  margin-top: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  /* display: inline-block; */
+  margin: 0 auto;
 }
 
 img.ash_caution {
-  width: 350px;
+  width: min(60%, 350px);
+}
+img.ash_caution:hover {
+  filter: contrast(0.88) brightness(1.2);
 }
 
-section#caution, section#caution2 {
-  text-align: center;
-  margin-top: 60px;
-  white-space: pre-line;
+img.structure {
+  width: 100%;
+  max-width: 550px
 }
 
-section#structure {
-  text-align: center;
-  margin-top: 100px;
-  user-select: none;
-  -webkit-user-drag: none;
-  -moz-user-select: none;
-  pointer-events: none;
+header > img {
+  width: 80%;
 
-  img.structure {
-      width: 550px
-    }
+  &.ash_face {
+    max-width: 700px;
+  }
+  &.ash_logo {
+    margin-top: 5%;
+    max-width: 500px;
+  }
 }
 
-section#explain {
-  margin-top: 200px;
-  padding-bottom: 100px;
-  text-align: justify;
-  white-space: pre-line;
-  display: inline-block;
+footer .collapsible label {
+  display: block;
 }
