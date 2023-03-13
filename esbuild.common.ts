@@ -11,11 +11,12 @@ const destPath = path.join(__dirname, 'dist');
 
 const config: Partial<esbuild.BuildOptions> = {
   entryPoints: [
-    path.join(srcPath, 'script.ts'),
     path.join(srcPath, 'index.html'),
-    path.join(srcPath, 'index.scss'),
+    path.join(srcPath, 'script/index.ts'),
+    path.join(srcPath, 'style/index.scss'),
     path.join(srcPath, 'ash_web.html'),
-    path.join(srcPath, 'ash_web.scss'),
+    path.join(srcPath, 'script/ash_web.ts'),
+    path.join(srcPath, 'style/ash_web.scss'),
   ],
   bundle: true,
   outdir: destPath,
