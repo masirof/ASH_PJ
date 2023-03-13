@@ -22,16 +22,14 @@
     "url": "https://github.com/Tsukina-7mochi/ASH_PJ/issues"
   },
   "homepage": "https://github.com/Tsukina-7mochi/ASH_PJ#readme",
-  "dependencies": {
-    "@chialab/esbuild-plugin-html": "^0.17.2",
-    "esbuild": "^0.17.11",
-    "esbuild-sass-plugin": "^2.6.0"
-  },
   "devDependencies": {
+    "@chialab/esbuild-plugin-html": "^0.17.2",
     "@types/argparse": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
     "chalk": "^5.2.0",
+    "esbuild": "^0.17.11",
+    "esbuild-sass-plugin": "^2.6.0",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",
     "glob": "^9.2.1",
