@@ -1,0 +1,59 @@
+@import "./common.scss"
+
+img.logo-parent {
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+  pointer-events: none;
+}
+
+img.ash_face {
+  width: 700px;
+  margin-top: -10px;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+}
+
+img.ash_logo {
+  width: 500px;
+  /* z-index: 1; */
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  /* display: inline-block; */
+}
+
+img.ash_caution {
+  width: 350px;
+}
+
+section#caution, section#caution2 {
+  text-align: center;
+  margin-top: 60px;
+  white-space: pre-line;
+}
+
+section#structure {
+  text-align: center;
+  margin-top: 100px;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+  pointer-events: none;
+
+  img.structure {
+      width: 550px
+    }
+}
+
+section#explain {
+  margin-top: 200px;
+  padding-bottom: 100px;
+  text-align: justify;
+  white-space: pre-line;
+  display: inline-block;
+}
