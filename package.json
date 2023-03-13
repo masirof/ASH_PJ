@@ -1,0 +1,24 @@
+{
+  "name": "ash_pj",
+  "version": "1.0.0",
+  "description": "https://masirof.github.io/ASH_PJ/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tsukina-7mochi/ASH_PJ.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tsukina-7mochi/ASH_PJ/issues"
+  },
+  "homepage": "https://github.com/Tsukina-7mochi/ASH_PJ#readme",
+  "dependencies": {
+    "@chialab/esbuild-plugin-html": "^0.17.2",
+    "esbuild": "^0.17.11",
+    "esbuild-sass-plugin": "^2.6.0"
+  }
+}
