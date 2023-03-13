@@ -13,6 +13,9 @@ const config: Partial<esbuild.BuildOptions> = {
   entryPoints: [
     path.join(srcPath, 'script.ts'),
     path.join(srcPath, 'index.html'),
+    path.join(srcPath, 'index.scss'),
+    path.join(srcPath, 'ash_web.html'),
+    path.join(srcPath, 'ash_web.scss'),
   ],
   bundle: true,
   outdir: destPath,
