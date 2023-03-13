@@ -4,7 +4,7 @@ import prodConfig from './esbuild.prod';
 
 let devFlag = false;
 let watchFlag = false;
-for (const arg in process.argv) {
+for (const arg of process.argv) {
   if (arg.startsWith('--')) {
     if (arg === '--dev') {
       devFlag = true;
