@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import { glob } from 'glob';
 
 interface Option {
-  baseDir?: string,
+  baseDir?: string;
   baseOutDir?: string;
   ignoreDirs?: string[];
   files: [
@@ -32,13 +32,18 @@ const copyPlugin = (option: Option): esbuild.Plugin => {
           });
 
           for (const fromFile of fromFiles) {
-            const dirname = path.dirname(path.relative(baseDir, path.resolve(fromFile)));
+            const dirname = path.dirname(
+              path.relative(baseDir, path.resolve(fromFile))
+            );
             const path_ = path.join(baseOutDir, dirname);
-            const name = path.basename(fromFile).replace(/\.[^/.]+$/, "");
+            const name = path.basename(fromFile).replace(/\.[^/.]+$/, '');
             const ext = path.extname(fromFile).slice(1);
             const toFile = path.join(
               baseOutDir,
-              file.to.replace('[path]', path_).replace('[name]', name).replace('[ext]', ext)
+              file.to
+                .replace('[path]', path_)
+                .replace('[name]', name)
+                .replace('[ext]', ext)
             );
 
             const promise = fs
