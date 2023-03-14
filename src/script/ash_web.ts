@@ -89,6 +89,7 @@ window.addEventListener('load', async () => {
   const returnTopButton = getElementByIdOrThrow('return_top');
 
   const twitterUrlRegExp = /^https?:\/\/twitter.com\/([a-zA-Z0-9_]+)/;
+  const skebUrlRegExp = /^https:\/\/skeb.jp\/@([a-zA-Z0-9_]+)/;
 
   try {
     await fetchAndLoadUserData('data/tweets.json');
@@ -108,7 +109,10 @@ window.addEventListener('load', async () => {
         continue;
       }
 
-      const author = item.tweet_url.match(twitterUrlRegExp)?.[1] ?? 'unknown';
+      const author =
+        item.tweet_url.match(twitterUrlRegExp)?.[1] ??
+        item.tweet_url.match(skebUrlRegExp)?.[1] ??
+        'unknown';
 
       for (const imageUrl of item.image) {
         promises.push(
