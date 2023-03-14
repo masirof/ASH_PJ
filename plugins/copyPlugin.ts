@@ -7,12 +7,10 @@ interface Option {
   baseDir?: string;
   baseOutDir?: string;
   ignoreDirs?: string[];
-  files: [
-    {
-      from: string;
-      to: string;
-    }
-  ];
+  files: {
+    from: string;
+    to: string;
+  }[];
 }
 
 const copyPlugin = (option: Option): esbuild.Plugin => {
@@ -46,7 +44,7 @@ const copyPlugin = (option: Option): esbuild.Plugin => {
                 .replace('[ext]', ext)
             );
 
-            const promise = fs
+            await fs
               .stat(path_)
               .then((stats) => {
                 if (!stats.isDirectory()) {
@@ -55,14 +53,14 @@ const copyPlugin = (option: Option): esbuild.Plugin => {
                   );
                 }
               })
-              .catch((_) => {
-                return fs.mkdir(path_, { recursive: true });
-              })
-              .then(() => {
-                return fs.copyFile(fromFile, toFile);
+              .catch((error) => {
+                if(error.code === 'ENOENT') {
+                  return fs.mkdir(path_, { recursive: true });
+                }
+                throw error;
               });
 
-            promises.push(promise);
+            promises.push(fs.copyFile(fromFile, toFile));
           }
         }
 

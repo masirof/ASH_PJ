@@ -28,7 +28,16 @@ const config: Partial<esbuild.BuildOptions> = {
     copyPlugin({
       baseDir: srcPath,
       baseOutDir: destPath,
-      files: [{ from: path.join(srcPath, 'imgs/*'), to: 'imgs/[name].[ext]' }],
+      files: [
+        { from: path.join(srcPath, 'imgs/*'), to: 'imgs/[name].[ext]' },
+      ],
+    }),
+    copyPlugin({
+      baseDir: __dirname,
+      baseOutDir: destPath,
+      files: [
+        { from: path.join(__dirname, 'data/tweets.json'), to: 'data/[name].[ext]' },
+      ]
     }),
     sassPlugin(),
     buildResultPlugin(),
