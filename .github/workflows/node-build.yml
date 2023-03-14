@@ -2,30 +2,30 @@ name: build with esbuild on nodejs
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Use Node.js 14.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: npm install
-      run: npm install
+      - name: npm install
+        run: npm install
 
-    - name: Build
-      run: npm run build
+      - name: Build
+        run: npm run build
 
-    - name: deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
