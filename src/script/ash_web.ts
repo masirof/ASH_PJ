@@ -73,7 +73,7 @@ const createArticle = function (
       });
     })
     .then(() => {
-      callback()
+      callback(undefined);
     })
     .catch((error) => {
       callback(error);
@@ -90,13 +90,13 @@ window.addEventListener('load', async () => {
 
   try {
     await fetchAndLoadUserData('data/tweets.json');
-  } catch(error) {
+  } catch (error) {
     elLoadInfo.style.display = 'block';
     throw error;
   }
 
   let photoIndex = 0;
-  const loadPhotos = async function(num: number) {
+  const loadPhotos = async function (num: number) {
     const promises = [];
     const indexEnd = Math.min(photoIndex + num, tweetData.length);
 
@@ -109,32 +109,35 @@ window.addEventListener('load', async () => {
       const author = item.tweet_url.match(twitterUrlRegExp)?.[1] ?? 'unknown';
 
       for (const imageUrl of item.image) {
-        promises.push(new Promise((resolve) => {
-          const elArticle = createArticle(
-            `${imageUrl}?format=jpg&name=small`,
-            author,
-            item.tweet_url,
-            (error) => {
-              if(error) {
-                elPhoto.removeChild(elArticle);
+        promises.push(
+          new Promise((resolve) => {
+            const elArticle = createArticle(
+              `${imageUrl}?format=jpg&name=small`,
+              author,
+              item.tweet_url,
+              (error) => {
+                if (error) {
+                  elPhoto.removeChild(elArticle);
+                }
+                resolve(undefined);
               }
-              resolve(undefined);
-            }
-          );
-          elPhoto.appendChild(elArticle);
-        }));
+            );
+            elPhoto.appendChild(elArticle);
+          })
+        );
       }
     }
 
     await Promise.all(promises);
-  }
+  };
 
   await loadPhotos(10);
 
   let loading = false;
   const pageHeightMultiplier = 2;
   window.addEventListener('scroll', () => {
-    if (!loading && window.scrollY > document.body.scrollHeight - window.innerHeight * pageHeightMultiplier) {
+    const scrollThreshold = document.body.scrollHeight - window.innerHeight * pageHeightMultiplier;
+    if (!loading && window.scrollY > scrollThreshold) {
       // console.log('Load: ', photoIndex);
       loading = true;
       loadPhotos(10).then(() => {
