@@ -161,4 +161,7 @@ window.addEventListener('load', async () => {
     await loadPhotos(30);
     loading = false;
   });
+  returnTopButton.addEventListener('click', () => {
+    window.scroll(0, 0);
+  });
 });
