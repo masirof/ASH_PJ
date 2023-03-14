@@ -45,22 +45,24 @@ const fetchImage = async function (url: string) {
 
 const createArticle = function (
   imageUrl: string,
-  author: string,
+  author: string | null,
   linkTarget: string,
   callback: (error: any) => void
 ) {
   const elArticle = document.createElement('article');
+
   const elLink = document.createElement('a');
   const elImage = document.createElement('img');
-  const elAuthorDiv = document.createElement('div');
-
   elLink.href = linkTarget;
-  elAuthorDiv.innerHTML = `<span>by<span> <span><a href="https://twitter.com/${author}">${author}</a></span>`;
-  elAuthorDiv.className = 'author';
-
   elLink.appendChild(elImage);
   elArticle.appendChild(elLink);
-  elArticle.appendChild(elAuthorDiv);
+
+  if (typeof author === 'string') {
+    const elAuthorDiv = document.createElement('div');
+    elAuthorDiv.innerHTML = `<span>by<span> <span><a href="https://twitter.com/${author}">${author}</a></span>`;
+    elAuthorDiv.className = 'author';
+    elArticle.appendChild(elAuthorDiv);
+  }
 
   fetchImage(imageUrl)
     .then((blob) => {
@@ -112,7 +114,7 @@ window.addEventListener('load', async () => {
       const author =
         item.tweet_url.match(twitterUrlRegExp)?.[1] ??
         item.tweet_url.match(skebUrlRegExp)?.[1] ??
-        'unknown';
+        null;
 
       for (const imageUrl of item.image) {
         promises.push(
