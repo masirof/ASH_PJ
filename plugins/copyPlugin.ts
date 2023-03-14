@@ -54,7 +54,7 @@ const copyPlugin = (option: Option): esbuild.Plugin => {
                 }
               })
               .catch((error) => {
-                if(error.code === 'ENOENT') {
+                if (error.code === 'ENOENT') {
                   return fs.mkdir(path_, { recursive: true });
                 }
                 throw error;

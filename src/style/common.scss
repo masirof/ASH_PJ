@@ -1,12 +1,14 @@
+@import "./defs.scss";
+
 :root {
   color-scheme: only light;
 }
 
 body {
-  background-color: rgb(22, 22, 22);
+  background-color: $c-bg;
   margin: 0;
   padding: 0;
-  color: white;
+  color: $c-text;
 }
 
 header {
@@ -21,7 +23,7 @@ section {
 }
 
 footer {
-  background-color: #000;
+  background-color: $c-bg-footer;
   margin: 0;
   padding: 2em 1em;
 }
@@ -32,7 +34,7 @@ footer {
   }
 
   label {
-    color: #3391ff;
+    color: $c-link;
     text-decoration: underline;
     cursor: pointer;
   }
@@ -47,7 +49,11 @@ footer {
 }
 
 a {
-  color: #3391ff;
+  color: $c-link;
+
+  &:visited {
+    color: $c-link-visited;
+  }
 }
 
 .screen-reader-text {
@@ -56,10 +62,4 @@ a {
   overflow: hidden;
   position: absolute !important;
   width: 1px;
-}
-
-.collapsible {
-  .collapsed {
-    display: none;
-  }
 }
