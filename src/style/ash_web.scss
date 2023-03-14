@@ -1,11 +1,15 @@
 @import "./common.scss";
 
-header img {
-  width: 80%;
+header {
+  margin: -2em 0 4em;
 
-  &.ash_logo {
-    margin-top: 5%;
-    max-width: 500px;
+  img {
+    width: 80%;
+
+    &.ash_logo {
+      margin-top: 5%;
+      max-width: 500px;
+    }
   }
 }
 
