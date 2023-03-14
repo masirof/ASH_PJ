@@ -68,15 +68,13 @@ section#photo {
   }
 }
 
-section#return_top {
+section#controls {
   a {
     display: grid;
     align-items: center;
     text-align: center;
     text-decoration: none;
     position:fixed;
-    bottom: 0.5em;
-    right: 0.5em;
     background-color: $c-text;
     color: $c-bg;
     width: 1em;
@@ -88,6 +86,16 @@ section#return_top {
     &:hover {
       outline: 2px solid $c-highlight1;
     }
+  }
+
+  a#shuffle {
+    bottom: 2.0em;
+    right: 0.5em;
+  }
+
+  a#return_top {
+    bottom: 0.5em;
+    right: 0.5em;
   }
 }
 

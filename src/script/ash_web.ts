@@ -1,5 +1,5 @@
 import './common';
-import { getElementByIdOrThrow } from './util';
+import { getElementByIdOrThrow, shuffleArray } from './util';
 
 interface TweetDataItem {
   image: string[];
@@ -85,6 +85,8 @@ const createArticle = function (
 window.addEventListener('load', async () => {
   const elPhoto = getElementByIdOrThrow('photo');
   const elLoadInfo = getElementByIdOrThrow('load_info');
+  const shuffleButton = getElementByIdOrThrow('shuffle');
+  const returnTopButton = getElementByIdOrThrow('return_top');
 
   const twitterUrlRegExp = /^https?:\/\/twitter.com\/([a-zA-Z0-9_]+)/;
 
@@ -131,12 +133,13 @@ window.addEventListener('load', async () => {
     await Promise.all(promises);
   };
 
-  await loadPhotos(10);
-
+  await loadPhotos(30);
   let loading = false;
+
   const pageHeightMultiplier = 2;
   window.addEventListener('scroll', () => {
-    const scrollThreshold = document.body.scrollHeight - window.innerHeight * pageHeightMultiplier;
+    const scrollThreshold =
+      document.body.scrollHeight - window.innerHeight * pageHeightMultiplier;
     if (!loading && window.scrollY > scrollThreshold) {
       // console.log('Load: ', photoIndex);
       loading = true;
@@ -146,5 +149,16 @@ window.addEventListener('load', async () => {
         }
       });
     }
+  });
+
+  // register shuffle and return top button listener
+  shuffleButton.addEventListener('click', async () => {
+    loading = true;
+    elPhoto.innerHTML = '';
+    photoIndex = 0;
+
+    shuffleArray(tweetData);
+    await loadPhotos(30);
+    loading = false;
   });
 });
