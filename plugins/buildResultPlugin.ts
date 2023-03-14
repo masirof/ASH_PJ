@@ -5,6 +5,9 @@ const getTimeString = () => {
   return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 };
 
+/**
+ * A plugin that shows build time and number of errors if exists.
+ */
 const buildResultPlugin = (): esbuild.Plugin => {
   let startTime = 0;
   let endTime = 0;

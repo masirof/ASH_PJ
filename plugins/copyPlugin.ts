@@ -13,6 +13,24 @@ interface Option {
   }[];
 }
 
+/**
+ * A plugin that copies files specified by `option`. Example:
+ * ```
+ * copyPlugin({
+ *   // base directory of source files
+ *   baseDir: './src',
+ *   // base directory of destination files
+ *   baseOutDir: './dist',
+ *   // directory ignored by wild card (see: npm:glob)
+ *   ignoreDirs: ['./cache'],
+ *   // files should be copied
+ *   files: [
+ *     { from: 'imgs/*', to: 'imgs/[name].[ext]' },
+ *     { from: 'wasm/*', to: 'wasm/[name].[ext]' },
+ *   ]
+ * })
+ * ```
+ */
 const copyPlugin = (option: Option): esbuild.Plugin => {
   const baseDir = option.baseDir ?? '.';
   const baseOutDir = option.baseOutDir ?? '';

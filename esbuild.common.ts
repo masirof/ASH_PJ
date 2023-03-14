@@ -7,8 +7,6 @@ import copyPlugin from './plugins/copyPlugin';
 const srcPath = path.join(__dirname, 'src');
 const destPath = path.join(__dirname, 'dist');
 
-// const copyFiles
-
 const config: Partial<esbuild.BuildOptions> = {
   entryPoints: [
     path.join(srcPath, 'index.html'),
@@ -34,6 +32,7 @@ const config: Partial<esbuild.BuildOptions> = {
       baseDir: __dirname,
       baseOutDir: destPath,
       files: [
+        // NOTE: copy plugin files will NOT be watched
         {
           from: path.join(__dirname, 'data/tweets.json'),
           to: 'data/[name].[ext]',
