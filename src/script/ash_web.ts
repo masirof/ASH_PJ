@@ -1,39 +1,6 @@
 import './common';
-import { getElementByIdOrThrow, shuffleArray } from './util';
-
-interface TweetDataItem {
-  image: string[];
-  like_count: number;
-  created_at: string;
-  tweet_url: string;
-}
-type TweetDataRaw = { [key: string]: TweetDataItem };
-const tweetData: (TweetDataItem | null)[] = [];
-
-const fetchAndLoadUserData = async function (remoteJsonURL: string) {
-  const response = await fetch(remoteJsonURL);
-  if (!response.ok) {
-    throw Error(
-      `Failed to fetch JSON file, server responded ${response.status}`
-    );
-  }
-  const text = await response.text();
-  const rawData = JSON.parse(text) as TweetDataRaw;
-
-  tweetData[0] = null;
-  let index = 1;
-  while (true) {
-    if (!(index in rawData)) {
-      break;
-    }
-
-    tweetData[index] = rawData[index];
-
-    index += 1;
-  }
-
-  return tweetData;
-};
+import { getElementByIdOrThrow, shuffleArray, DataLoader } from './util';
+import { fetchPhotoData, extractUserFromURL, PhotoDataItem } from './photoData';
 
 const fetchImage = async function (url: string) {
   const response = await fetch(url);
@@ -46,6 +13,7 @@ const fetchImage = async function (url: string) {
 const createArticle = function (
   imageUrl: string,
   author: string | null,
+  authorURL: string,
   linkTarget: string,
   callback: (error: any) => void
 ) {
@@ -57,12 +25,16 @@ const createArticle = function (
   elLink.appendChild(elImage);
   elArticle.appendChild(elLink);
 
+  const elAuthorDiv = document.createElement('div');
   if (typeof author === 'string') {
-    const elAuthorDiv = document.createElement('div');
-    elAuthorDiv.innerHTML = `<span>by<span> <span><a href="https://twitter.com/${author}">${author}</a></span>`;
-    elAuthorDiv.className = 'author';
-    elArticle.appendChild(elAuthorDiv);
+    elAuthorDiv.innerHTML =
+      `<span>by<span> ` +
+      `<span><a href="${authorURL}" target="_blank" rel="noopener">${author}</a></span>`;
+  } else {
+    elAuthorDiv.innerHTML = `<span><a href="${authorURL}" target="_blank" rel="noopener">Author</a></span>`;
   }
+  elAuthorDiv.className = 'author';
+  elArticle.appendChild(elAuthorDiv);
 
   fetchImage(imageUrl)
     .then((blob) => {
@@ -84,88 +56,107 @@ const createArticle = function (
   return elArticle;
 };
 
+// load specified number of photos and append to document
+const loadPhotos = async function (
+  photoDataLoader: DataLoader<PhotoDataItem>,
+  outputElement: HTMLElement,
+  num: number
+) {
+  if (photoDataLoader.done()) {
+    return true;
+  }
+
+  const imageLoadPromise = [];
+  let allPhotosLoaded = false;
+
+  for (let i = 0; i < num; i++) {
+    const { value, done } = photoDataLoader.next();
+
+    const userInfo = extractUserFromURL(value.tweet_url);
+    for (const imageUrl of value.image) {
+      imageLoadPromise.push(
+        new Promise((resolve) => {
+          const elArticle = createArticle(
+            imageUrl,
+            userInfo?.userName ?? null,
+            userInfo?.userLink ?? value.tweet_url,
+            imageUrl,
+            (error) => {
+              if (error) {
+                outputElement.removeChild(elArticle);
+              }
+              resolve(undefined);
+            }
+          );
+          outputElement.appendChild(elArticle);
+        })
+      );
+    }
+
+    if (done) {
+      allPhotosLoaded = true;
+      break;
+    }
+  }
+
+  await Promise.all(imageLoadPromise);
+
+  return allPhotosLoaded;
+};
+
 window.addEventListener('load', async () => {
   const elPhoto = getElementByIdOrThrow('photo');
   const elLoadInfo = getElementByIdOrThrow('load_info');
   const shuffleButton = getElementByIdOrThrow('shuffle');
   const returnTopButton = getElementByIdOrThrow('return_top');
 
-  const twitterUrlRegExp = /^https?:\/\/twitter.com\/([a-zA-Z0-9_]+)/;
-  const skebUrlRegExp = /^https:\/\/skeb.jp\/@([a-zA-Z0-9_]+)/;
-
-  try {
-    await fetchAndLoadUserData('data/tweets.json');
-  } catch (error) {
+  const photoData = await fetchPhotoData('data/tweets.json').catch((error) => {
+    // failed to fetch photo data
+    console.error(error);
     elLoadInfo.style.display = 'block';
-    throw error;
-  }
 
-  let photoIndex = 0;
-  const loadPhotos = async function (num: number) {
-    const promises = [];
-    const indexEnd = Math.min(photoIndex + num, tweetData.length);
+    return [] as PhotoDataItem[];
+  });
+  const photoDataLoader = new DataLoader(photoData);
 
-    for (; photoIndex < indexEnd; photoIndex++) {
-      const item = tweetData[photoIndex];
-      if (!item) {
-        continue;
-      }
+  const initialPhotoCount = 30;
+  const additionalPhotoCount = 10;
+  await loadPhotos(photoDataLoader, elPhoto, initialPhotoCount);
 
-      const author =
-        item.tweet_url.match(twitterUrlRegExp)?.[1] ??
-        item.tweet_url.match(skebUrlRegExp)?.[1] ??
-        null;
+  //// Load photos when scrolling to the bottom of the page ////
+  const pageHeightMultiplier = 2;
+  let photoLoadDisabled = false;
 
-      for (const imageUrl of item.image) {
-        promises.push(
-          new Promise((resolve) => {
-            const elArticle = createArticle(
-              `${imageUrl}?format=jpg&name=small`,
-              author,
-              item.tweet_url,
-              (error) => {
-                if (error) {
-                  elPhoto.removeChild(elArticle);
-                }
-                resolve(undefined);
-              }
-            );
-            elPhoto.appendChild(elArticle);
-          })
-        );
-      }
+  window.addEventListener('scroll', () => {
+    if (photoLoadDisabled) {
+      return;
     }
 
-    await Promise.all(promises);
-  };
-
-  await loadPhotos(30);
-  let loading = false;
-
-  const pageHeightMultiplier = 2;
-  window.addEventListener('scroll', () => {
     const scrollThreshold =
       document.body.scrollHeight - window.innerHeight * pageHeightMultiplier;
-    if (!loading && window.scrollY > scrollThreshold) {
-      // console.log('Load: ', photoIndex);
-      loading = true;
-      loadPhotos(10).then(() => {
-        if (photoIndex < tweetData.length) {
-          loading = false;
+
+    if (window.scrollY > scrollThreshold) {
+      photoLoadDisabled = true;
+      loadPhotos(photoDataLoader, elPhoto, additionalPhotoCount).then(() => {});
+
+      loadPhotos(photoDataLoader, elPhoto, additionalPhotoCount).then(
+        (allPhotosLoaded) => {
+          photoLoadDisabled = allPhotosLoaded;
         }
-      });
+      );
     }
   });
 
-  // register shuffle and return top button listener
+  //// register shuffle and return top button listener ////
   shuffleButton.addEventListener('click', async () => {
-    loading = true;
-    elPhoto.innerHTML = '';
-    photoIndex = 0;
+    photoLoadDisabled = true;
 
-    shuffleArray(tweetData);
-    await loadPhotos(30);
-    loading = false;
+    elPhoto.innerHTML = '';
+    photoDataLoader.reset();
+    photoDataLoader.shuffle();
+    await loadPhotos(photoDataLoader, elPhoto, initialPhotoCount);
+
+    photoLoadDisabled = false;
   });
   returnTopButton.addEventListener('click', () => {
     window.scroll(0, 0);
