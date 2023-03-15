@@ -80,7 +80,7 @@ const loadPhotos = async function (
             imageUrl,
             userInfo?.userName ?? null,
             userInfo?.userLink ?? value.tweet_url,
-            imageUrl,
+            value.tweet_url,
             (error) => {
               if (error) {
                 outputElement.removeChild(elArticle);
