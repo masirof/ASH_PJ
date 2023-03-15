@@ -20,6 +20,10 @@ section#photo {
   flex-wrap: wrap;
   gap: 0.5em;
 
+  &.width-expanded {
+    max-width: 100%;
+  }
+
   article {
     border-radius: 0.5em;
     position: relative;
@@ -91,6 +95,16 @@ section#controls {
 
     &:hover {
       outline: 2px solid $c-highlight1;
+    }
+  }
+
+  a#change_width {
+    bottom: 3.5em;
+    right: 0.5em;
+  }
+  @media screen and (max-width: $screen-width-medium) {
+    a#change_width {
+      display: none;
     }
   }
 

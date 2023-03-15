@@ -107,8 +107,6 @@ const loadPhotos = async function (
 window.addEventListener('load', async () => {
   const elPhoto = getElementByIdOrThrow('photo');
   const elLoadInfo = getElementByIdOrThrow('load_info');
-  const shuffleButton = getElementByIdOrThrow('shuffle');
-  const returnTopButton = getElementByIdOrThrow('return_top');
 
   const photoData = await fetchPhotoData('data/tweets.json').catch((error) => {
     // failed to fetch photo data
@@ -147,7 +145,13 @@ window.addEventListener('load', async () => {
     }
   });
 
-  //// register shuffle and return top button listener ////
+  //// register buttons ////
+  const changeWidthButton = getElementByIdOrThrow('change_width');
+  changeWidthButton.addEventListener('click', () => {
+    elPhoto.classList.toggle('width-expanded');
+  });
+
+  const shuffleButton = getElementByIdOrThrow('shuffle');
   shuffleButton.addEventListener('click', async () => {
     photoLoadDisabled = true;
 
@@ -158,6 +162,8 @@ window.addEventListener('load', async () => {
 
     photoLoadDisabled = false;
   });
+
+  const returnTopButton = getElementByIdOrThrow('return_top');
   returnTopButton.addEventListener('click', () => {
     window.scroll(0, 0);
   });
